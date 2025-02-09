@@ -1,0 +1,22 @@
+{
+  "name": "heap",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "ts-node src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Antony74/heap.git"
+  },
+  "author": "Antony74",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Antony74/heap/issues"
+  },
+  "homepage": "https://github.com/Antony74/heap#readme",
+  "dependencies": {
+    "@types/node": "^22.13.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}
