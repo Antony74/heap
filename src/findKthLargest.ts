@@ -1,4 +1,6 @@
-const findKthLargest = (nums: number[], k: number): number => {
+import { createHeap } from './heap';
+
+export const findKthLargest = (nums: number[], k: number): number => {
     const heap = createHeap();
     for (const num of nums) {
         heap.push(num);

@@ -1,4 +1,7 @@
-const createHeap = () => {
+import { swap } from './swap';
+import { createTreeArray, TreeItem } from './treeArray';
+
+export const createHeap = () => {
     const treeArray = createTreeArray();
     let length = 0;
 
@@ -12,6 +15,11 @@ const createHeap = () => {
 
             while (true) {
                 const parent = item.up();
+
+                if (parent === null) {
+                    break;
+                }
+
                 const swapped = swap(item, parent);
 
                 if (!swapped) {
@@ -25,7 +33,7 @@ const createHeap = () => {
             treeArray.print();
         },
 
-        pop: (): number | undefined => {
+        pop: (): number | null | undefined => {
             console.log('popping');
             let item = treeArray.getRoot();
             if (item === null) {
@@ -36,14 +44,18 @@ const createHeap = () => {
             item.setValue(null);
 
             while (true) {
-                const left = item.left();
-                const right = item.right();
-                const leftIsNull = left === null || left.getValue() === null;
+                const leftValue = item.left().getValue();
+                const rightValue = item.right().getValue();
+
                 let child: TreeItem | null = null;
-                if (leftIsNull || (left.getValue() > right.getValue())) {
-                    child = right;
+                if (leftValue === null) {
+                    child = item.right();
+                } else if (rightValue === null) {
+                    child = item.left();
+                } else if (leftValue > rightValue) {
+                    child = item.right();
                 } else {
-                    child = left;
+                    child = item.left();
                 }
 
                 const swapped = swap(child, item);
@@ -61,4 +73,4 @@ const createHeap = () => {
         },
     };
     return heap;
-}
+};

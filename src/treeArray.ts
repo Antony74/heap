@@ -1,12 +1,12 @@
-type TreeItem = {
+export type TreeItem = {
     getValue: () => number | null,
     setValue: (value: number | null) => void,
-    up: () => TreeItem;
+    up: () => TreeItem | null;
     left: () => TreeItem;
     right: () => TreeItem;
 }
 
-const createTreeArray = () => {
+export const createTreeArray = () => {
     const arr: (number | null)[] = [null];
 
     const getParentIndex = (index: number): number => {
@@ -24,17 +24,17 @@ const createTreeArray = () => {
         return result;
     }
 
-    const getItem = (index: number): TreeItem => {
+    const getItem = (index: number): TreeItem | null => {
         if (index < 1 || index >= arr.length) {
-            throw new Error(`${index} out of range`);
+            return null;
         }
 
         return {
             getValue: () => arr[index],
             setValue: (value: number | null) => { arr[index] = value; },
             up: () => getItem(getParentIndex(index)),
-            left: () => getItem(getLeftIndex(index)),
-            right: () => getItem(getRightIndex(index))
+            left: () => getItem(getLeftIndex(index))!,
+            right: () => getItem(getRightIndex(index))!
         }
     }
 
@@ -46,7 +46,7 @@ const createTreeArray = () => {
                 return parent;
             } else {
                 arr.push(null);
-                return getItem(index);
+                return getItem(index)!;
             }
         },
         getRoot: (): TreeItem | null => {
