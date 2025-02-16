@@ -6,7 +6,7 @@ export const createMockHeap = () => {
     return {
         push: (value: number) => {
             arr.push(value);
-            arr.sort();
+            arr.sort((a, b) => a - b);
         },
         take: () => arr.shift(),
         size: () => arr.length
