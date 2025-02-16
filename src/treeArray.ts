@@ -1,10 +1,4 @@
-export type TreeItem = {
-    getValue: () => number | null,
-    setValue: (value: number | null) => void,
-    up: () => TreeItem | null;
-    left: () => TreeItem;
-    right: () => TreeItem;
-}
+import { TreeItem } from "./types";
 
 export const createTreeArray = () => {
     const arr: (number | null)[] = [null];
@@ -12,17 +6,23 @@ export const createTreeArray = () => {
     const getParentIndex = (index: number): number => {
         const result = Math.floor(index * 0.5);
         return result;
-    }
+    };
 
     const getLeftIndex = (index: number): number => {
         const result = index * 2;
+        console.log(
+            `left of arr[${index}] = ${arr[index]} is arr[${result}] = ${arr[result]}`
+        );
         return result;
-    }
+    };
 
     const getRightIndex = (index: number): number => {
-        const result = (index * 2) + 1;
+        const result = index * 2 + 1;
+        console.log(
+            `right of arr[${index}] = ${arr[index]} is arr[${result}] = ${arr[result]}`
+        );
         return result;
-    }
+    };
 
     const getItem = (index: number): TreeItem | null => {
         if (index < 1 || index >= arr.length) {
@@ -31,12 +31,14 @@ export const createTreeArray = () => {
 
         return {
             getValue: () => arr[index],
-            setValue: (value: number | null) => { arr[index] = value; },
+            setValue: (value: number | null) => {
+                arr[index] = value;
+            },
             up: () => getItem(getParentIndex(index)),
             left: () => getItem(getLeftIndex(index))!,
-            right: () => getItem(getRightIndex(index))!
-        }
-    }
+            right: () => getItem(getRightIndex(index))!,
+        };
+    };
 
     const treeArray = {
         createNext: (): TreeItem => {
@@ -54,8 +56,8 @@ export const createTreeArray = () => {
         },
         print: () => {
             console.log(JSON.stringify(arr));
-        }
+        },
     };
 
     return treeArray;
-}
+};

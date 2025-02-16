@@ -1,6 +1,6 @@
 import { createHeap } from './heap';
 
-const createMockHeap = () => {
+export const createMockHeap = () => {
     const arr: number[] = [];
 
     return {
@@ -8,18 +8,18 @@ const createMockHeap = () => {
             arr.push(value);
             arr.sort();
         },
-        pop: () => arr.shift(),
+        take: () => arr.shift(),
         size: () => arr.length
     };
 };
 
 export const findKthLargest = (nums: number[], k: number): number => {
-    const heap = createMockHeap();
+    const heap = createHeap();
     for (const num of nums) {
         heap.push(num);
         if (heap.size() > k) {
-            heap.pop();
+            heap.take();
         }
     }
-    return heap.pop()!;
+    return heap.take()!;
 };

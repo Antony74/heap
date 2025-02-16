@@ -1,5 +1,60 @@
-import { swap } from './swap';
-import { createTreeArray, TreeItem } from './treeArray';
+import { bubble } from './bubble';
+import { createTreeArray } from './treeArray';
+import { ListItem, PredicateFunction, TreeItem } from './types';
+
+const wrapTreeItemUp = (treeItem: TreeItem | null): ListItem | null => {
+    if (treeItem === null) {
+        return null;
+    }
+
+    return {
+        ...treeItem,
+        getNext() {
+            return wrapTreeItemUp(treeItem.up());
+        },
+    };
+};
+
+const predFn: PredicateFunction = (a, b) => {
+    if (a === null) {
+        return false;
+    } else if (b === null) {
+        return true;
+    } else {
+        return a < b;
+    }
+}
+
+const wrapTreeItemDown = (treeItem: TreeItem | null): ListItem | null => {
+    if (treeItem === null) {
+        return null;
+    }
+
+    return {
+        ...treeItem,
+        getNext() {
+            const left = treeItem.left();
+            const right = treeItem.right();
+
+            if (left === null && right === null) {
+                return null;
+            }
+
+            if (left === null) {
+                return wrapTreeItemDown(right);
+            } else if (right === null) {
+                return wrapTreeItemDown(left);
+            }
+
+            const leftValue = left.getValue();
+            const rightValue = right.getValue();
+
+            const child = predFn(leftValue, rightValue) ? left : right; 
+
+            return wrapTreeItemDown(child);
+        },
+    };
+};
 
 export const createHeap = () => {
     const treeArray = createTreeArray();
@@ -13,61 +68,27 @@ export const createHeap = () => {
             let item = treeArray.createNext();
             item.setValue(value);
 
-            while (true) {
-                const parent = item.up();
-
-                if (parent === null) {
-                    break;
-                }
-
-                const swapped = swap(item, parent);
-
-                if (!swapped) {
-                    break;
-                }
-
-                item = parent;
-            }
+            bubble(wrapTreeItemUp(item), predFn);
 
             ++length;
             treeArray.print();
         },
 
-        pop: (): number | null | undefined => {
-            console.log('popping');
+        take: (): number | null => {
+            console.log('taking');
             let item = treeArray.getRoot();
             if (item === null) {
-                console.log('pop empty/null');
-                return undefined;
+                console.log('take empty/null');
+                return null;
             }
             const result = item.getValue();
             item.setValue(null);
 
-            while (true) {
-                const leftValue = item.left().getValue();
-                const rightValue = item.right().getValue();
-
-                let child: TreeItem | null = null;
-                if (leftValue === null) {
-                    child = item.right();
-                } else if (rightValue === null) {
-                    child = item.left();
-                } else if (leftValue > rightValue) {
-                    child = item.right();
-                } else {
-                    child = item.left();
-                }
-
-                const swapped = swap(child, item);
-
-                if (!swapped) {
-                    break;
-                }
-            }
+            bubble(wrapTreeItemDown(item), (a, b) => !predFn(a, b));
 
             --length;
 
-            console.log(`pop ${result}`);
+            console.log(`take ${result}`);
             treeArray.print();
             return result;
         },
