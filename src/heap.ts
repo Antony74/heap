@@ -64,21 +64,17 @@ export const createHeap = () => {
         size: () => length,
 
         push: (value: number) => {
-            console.log(`push ${value}`);
             let item = treeArray.createNext();
             item.setValue(value);
 
             bubble(wrapTreeItemUp(item), predFn);
 
             ++length;
-            treeArray.print();
         },
 
         take: (): number | null => {
-            console.log('taking');
             let item = treeArray.getRoot();
             if (item === null) {
-                console.log('take empty/null');
                 return null;
             }
             const result = item.getValue();
@@ -88,8 +84,6 @@ export const createHeap = () => {
 
             --length;
 
-            console.log(`take ${result}`);
-            treeArray.print();
             return result;
         },
     };

@@ -10,17 +10,11 @@ export const createTreeArray = () => {
 
     const getLeftIndex = (index: number): number => {
         const result = index * 2;
-        console.log(
-            `left of arr[${index}] = ${arr[index]} is arr[${result}] = ${arr[result]}`
-        );
         return result;
     };
 
     const getRightIndex = (index: number): number => {
         const result = index * 2 + 1;
-        console.log(
-            `right of arr[${index}] = ${arr[index]} is arr[${result}] = ${arr[result]}`
-        );
         return result;
     };
 
@@ -53,9 +47,6 @@ export const createTreeArray = () => {
         },
         getRoot: (): TreeItem | null => {
             return getItem(1);
-        },
-        print: () => {
-            console.log(JSON.stringify(arr));
         },
     };
 
