@@ -29,8 +29,8 @@ export const createTreeArray = () => {
                 arr[index] = value;
             },
             up: () => getItem(getParentIndex(index)),
-            left: () => getItem(getLeftIndex(index))!,
-            right: () => getItem(getRightIndex(index))!,
+            left: () => getItem(getLeftIndex(index)),
+            right: () => getItem(getRightIndex(index)),
         };
     };
 
