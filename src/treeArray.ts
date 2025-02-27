@@ -1,54 +1,43 @@
-import { TreeItem } from "./types";
+export type TreeArray = {
+    getValue: (index: number) => number | null;
+    setValue: (index: number, value: number | null) => void;
+    push: (value: number | null) => void;
+    size: () => number;
+    inRange: (index: number) => boolean;
+    getParentIndex: (index: number) => number;
+    getLeftIndex: (index: number) => number;
+    getRightIndex: (index: number) => number;
+};
 
-export const createTreeArray = () => {
+export const createTreeArray = (): TreeArray => {
     const arr: (number | null)[] = [null];
 
-    const getParentIndex = (index: number): number => {
-        const result = Math.floor(index * 0.5);
-        return result;
-    };
+    return {
+        getValue: (index: number) => arr[index],
 
-    const getLeftIndex = (index: number): number => {
-        const result = index * 2;
-        return result;
-    };
-
-    const getRightIndex = (index: number): number => {
-        const result = index * 2 + 1;
-        return result;
-    };
-
-    const getItem = (index: number): TreeItem | null => {
-        if (index < 1 || index >= arr.length) {
-            return null;
-        }
-
-        return {
-            getValue: () => arr[index],
-            setValue: (value: number | null) => {
-                arr[index] = value;
-            },
-            up: () => getItem(getParentIndex(index)),
-            left: () => getItem(getLeftIndex(index)),
-            right: () => getItem(getRightIndex(index)),
-        };
-    };
-
-    const treeArray = {
-        createNext: (): TreeItem => {
-            const index = arr.length;
-            const parent = getItem(getParentIndex(index));
-            if (parent !== null && parent.getValue() === null) {
-                return parent;
-            } else {
-                arr.push(null);
-                return getItem(index)!;
-            }
+        setValue: (index: number, value: number | null) => {
+            arr[index] = value;
         },
-        getRoot: (): TreeItem | null => {
-            return getItem(1);
+
+        push: (value: number | null) => arr.push(value),
+
+        size: () => arr.length,
+
+        inRange: (index: number) => index > 0 && index < arr.length,
+
+        getParentIndex: (index: number): number => {
+            const result = Math.floor(index * 0.5);
+            return result;
+        },
+
+        getLeftIndex: (index: number): number => {
+            const result = index * 2;
+            return result;
+        },
+
+        getRightIndex: (index: number): number => {
+            const result = index * 2 + 1;
+            return result;
         },
     };
-
-    return treeArray;
 };

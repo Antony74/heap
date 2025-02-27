@@ -1,60 +1,11 @@
 import { bubble } from './bubble';
+import {
+    createDownIterator,
+    createPrevIterator,
+    createUpIterator,
+} from './iterators';
+import { predFn } from './predFn';
 import { createTreeArray } from './treeArray';
-import { ListItem, PredicateFunction, TreeItem } from './types';
-
-const wrapTreeItemUp = (treeItem: TreeItem | null): ListItem | null => {
-    if (treeItem === null) {
-        return null;
-    }
-
-    return {
-        ...treeItem,
-        getNext() {
-            return wrapTreeItemUp(treeItem.up());
-        },
-    };
-};
-
-const predFn: PredicateFunction = (a, b) => {
-    if (a === null) {
-        return false;
-    } else if (b === null) {
-        return true;
-    } else {
-        return a < b;
-    }
-}
-
-const wrapTreeItemDown = (treeItem: TreeItem | null): ListItem | null => {
-    if (treeItem === null) {
-        return null;
-    }
-
-    return {
-        ...treeItem,
-        getNext() {
-            const left = treeItem.left();
-            const right = treeItem.right();
-
-            if (left === null && right === null) {
-                return null;
-            }
-
-            if (left === null) {
-                return wrapTreeItemDown(right);
-            } else if (right === null) {
-                return wrapTreeItemDown(left);
-            }
-
-            const leftValue = left.getValue();
-            const rightValue = right.getValue();
-
-            const child = predFn(leftValue, rightValue) ? left : right; 
-
-            return wrapTreeItemDown(child);
-        },
-    };
-};
 
 export const createHeap = () => {
     const treeArray = createTreeArray();
@@ -64,23 +15,38 @@ export const createHeap = () => {
         size: () => length,
 
         push: (value: number) => {
-            let item = treeArray.createNext();
-            item.setValue(value);
+            let index = treeArray.size();
+            const parentIndex = treeArray.getParentIndex(index);
 
-            bubble(wrapTreeItemUp(item), predFn);
+            if (
+                treeArray.inRange(parentIndex) &&
+                treeArray.getValue(parentIndex) === null
+            ) {
+                index = parentIndex;
+                treeArray.setValue(parentIndex, value);
+            } else {
+                treeArray.push(value);
+            }
+
+            bubble(
+                createPrevIterator(createUpIterator(treeArray, index)),
+                predFn
+            );
 
             ++length;
         },
 
         take: (): number | null => {
-            let item = treeArray.getRoot();
-            if (item === null) {
+            const result = treeArray.getValue(1);
+            if (result === null) {
                 return null;
             }
-            const result = item.getValue();
-            item.setValue(null);
+            treeArray.setValue(1, null);
 
-            bubble(wrapTreeItemDown(item), (a, b) => !predFn(a, b));
+            bubble(
+                createPrevIterator(createDownIterator(treeArray, 1)),
+                (a, b) => !predFn(a, b)
+            );
 
             --length;
 

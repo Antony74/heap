@@ -1,26 +1,26 @@
-import { ListItem, PredicateFunction } from "./types";
+import { PrevIterator } from './iterators';
+import { predFn, PredicateFunction } from './predFn';
 
-export const bubble = (item: ListItem | null, predFn: PredicateFunction) => {
-    if (item === null) {
+export const bubble = (iterator: PrevIterator, predFn: PredicateFunction) => {
+    if (iterator === null) {
         return;
     }
 
-    const next = item.getNext();
+    const prevValue = iterator.getValue();
+    const next = iterator.next();
 
-    if (next === null) {
+    if (next === false) {
         return;
     }
 
-    const value = item.getValue();
-    const nextValue = next.getValue();
+    const value = iterator.getValue();
 
-    if (!predFn(value, nextValue)) {
+    if (!predFn(prevValue, value)) {
         return;
     }
 
-    next.setValue(value);
-    item.setValue(nextValue);
+    iterator.setValue(prevValue);
+    iterator.setPrevValue(value);
 
-    bubble(next, predFn);
-}
-
+    bubble(iterator, predFn);
+};
