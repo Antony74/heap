@@ -1,4 +1,4 @@
-import { findKthLargest } from '../src/findKthLargest';
+import { findKthLargest } from '../../src/examples/findKthLargest';
 
 describe('findKthLargest', () => {
     test('Case 1', () => {
