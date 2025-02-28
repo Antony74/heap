@@ -1,4 +1,4 @@
-import { predFn } from './predFn';
+import { PredicateFunction } from './predFn';
 import { TreeArray } from './treeArray';
 
 export const createUpIterator = (treeArray: TreeArray, index: number) => {
@@ -20,7 +20,8 @@ type ListIterator = ReturnType<typeof createUpIterator>;
 
 export const createDownIterator = (
     treeArray: TreeArray,
-    index: number
+    index: number,
+    predFn: PredicateFunction
 ): ListIterator => {
     return {
         getArray: () => treeArray.getArray(),

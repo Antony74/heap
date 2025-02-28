@@ -4,10 +4,10 @@ import {
     createSwapIterator,
     createUpIterator,
 } from './iterators';
-import { predFn } from './predFn';
+import { PredicateFunction } from './predFn';
 import { createTreeArray } from './treeArray';
 
-export const createHeap = () => {
+export const createHeap = (predFn: PredicateFunction) => {
     const treeArray = createTreeArray();
     let length = 0;
 
@@ -46,7 +46,7 @@ export const createHeap = () => {
             arr[1] = null;
 
             bubble(
-                createSwapIterator(createDownIterator(treeArray, 1)),
+                createSwapIterator(createDownIterator(treeArray, 1, predFn)),
                 (a, b) => -predFn(a, b)
             );
 
