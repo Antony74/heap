@@ -7,7 +7,7 @@ export const createPredFnWithNull = (predFn: PredFn) => {
         } else if (b === null) {
             return -1;
         } else {
-            return a - b;
+            return predFn(a, b);
         }
     };
 };
