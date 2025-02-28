@@ -1,8 +1,8 @@
 import { createHeap } from '../heap';
-import { predFn } from '../predFn';
+import { createPredFnWithNull } from '../predFn';
 
 export const findKthLargest = (nums: number[], k: number): number => {
-    const heap = createHeap(predFn);
+    const heap = createHeap(createPredFnWithNull((a, b) => a - b));
     for (const num of nums) {
         heap.push(num);
         if (heap.size() > k) {

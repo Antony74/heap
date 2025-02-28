@@ -4,10 +4,10 @@ import {
     createSwapIterator,
     createUpIterator,
 } from './iterators';
-import { PredicateFunction } from './predFn';
+import { PredFnWithNull } from './predFn';
 import { createTreeArray } from './treeArray';
 
-export const createHeap = (predFn: PredicateFunction) => {
+export const createHeap = (predFn: PredFnWithNull) => {
     const treeArray = createTreeArray();
     let length = 0;
 
