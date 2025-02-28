@@ -1,7 +1,7 @@
-import { PrevIterator } from './iterators';
-import { predFn, PredicateFunction } from './predFn';
+import { SwapIterator } from './iterators';
+import { PredicateFunction } from './predFn';
 
-export const bubble = (iterator: PrevIterator, predFn: PredicateFunction) => {
+export const bubble = (iterator: SwapIterator, predFn: PredicateFunction) => {
     if (iterator === null) {
         return;
     }
@@ -19,8 +19,7 @@ export const bubble = (iterator: PrevIterator, predFn: PredicateFunction) => {
         return;
     }
 
-    iterator.setValue(prevValue);
-    iterator.setPrevValue(value);
+    iterator.swap();
 
     bubble(iterator, predFn);
 };

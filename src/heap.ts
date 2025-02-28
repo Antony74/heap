@@ -1,7 +1,7 @@
 import { bubble } from './bubble';
 import {
     createDownIterator,
-    createPrevIterator,
+    createSwapIterator,
     createUpIterator,
 } from './iterators';
 import { predFn } from './predFn';
@@ -15,21 +15,22 @@ export const createHeap = () => {
         size: () => length,
 
         push: (value: number) => {
-            let index = treeArray.size();
+            const arr = treeArray.getArray();
+            let index = arr.length;
             const parentIndex = treeArray.getParentIndex(index);
 
             if (
                 treeArray.inRange(parentIndex) &&
-                treeArray.getValue(parentIndex) === null
+                arr[parentIndex] === null
             ) {
                 index = parentIndex;
-                treeArray.setValue(parentIndex, value);
+                arr[parentIndex] = value;
             } else {
-                treeArray.push(value);
+                arr.push(value);
             }
 
             bubble(
-                createPrevIterator(createUpIterator(treeArray, index)),
+                createSwapIterator(createUpIterator(treeArray, index)),
                 predFn
             );
 
@@ -37,14 +38,15 @@ export const createHeap = () => {
         },
 
         take: (): number | null => {
-            const result = treeArray.getValue(1);
+            const arr = treeArray.getArray();
+            const result = arr[1];
             if (result === null) {
                 return null;
             }
-            treeArray.setValue(1, null);
+            arr[1] = null;
 
             bubble(
-                createPrevIterator(createDownIterator(treeArray, 1)),
+                createSwapIterator(createDownIterator(treeArray, 1)),
                 (a, b) => !predFn(a, b)
             );
 

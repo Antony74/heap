@@ -1,27 +1,9 @@
-export type TreeArray = {
-    getValue: (index: number) => number | null;
-    setValue: (index: number, value: number | null) => void;
-    push: (value: number | null) => void;
-    size: () => number;
-    inRange: (index: number) => boolean;
-    getParentIndex: (index: number) => number;
-    getLeftIndex: (index: number) => number;
-    getRightIndex: (index: number) => number;
-};
 
-export const createTreeArray = (): TreeArray => {
+export const createTreeArray = () => {
     const arr: (number | null)[] = [null];
 
     return {
-        getValue: (index: number) => arr[index],
-
-        setValue: (index: number, value: number | null) => {
-            arr[index] = value;
-        },
-
-        push: (value: number | null) => arr.push(value),
-
-        size: () => arr.length,
+        getArray: () => arr,
 
         inRange: (index: number) => index > 0 && index < arr.length,
 
@@ -41,3 +23,5 @@ export const createTreeArray = (): TreeArray => {
         },
     };
 };
+
+export type TreeArray = ReturnType<typeof createTreeArray>;
