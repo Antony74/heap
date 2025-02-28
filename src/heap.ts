@@ -47,7 +47,7 @@ export const createHeap = () => {
 
             bubble(
                 createSwapIterator(createDownIterator(treeArray, 1)),
-                (a, b) => !predFn(a, b)
+                (a, b) => -predFn(a, b)
             );
 
             --length;

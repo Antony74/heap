@@ -15,7 +15,7 @@ export const bubble = (iterator: SwapIterator, predFn: PredicateFunction) => {
 
     const value = iterator.getValue();
 
-    if (!predFn(prevValue, value)) {
+    if (predFn(prevValue, value) >= 0) {
         return;
     }
 

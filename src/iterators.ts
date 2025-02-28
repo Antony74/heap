@@ -39,7 +39,7 @@ export const createDownIterator = (
             } else {
                 const leftValue = treeArray.getArray()[left];
                 const rightValue = treeArray.getArray()[right];
-                if (predFn(leftValue, rightValue)) {
+                if (predFn(leftValue, rightValue) < 0) {
                     index = left;
                 } else {
                     index = right;

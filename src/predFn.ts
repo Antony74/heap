@@ -1,11 +1,11 @@
-export type PredicateFunction = (a: number | null, b: number | null) => boolean;
-
-export const predFn = (a: number | null, b: number | null): boolean => {
+export const predFn = (a: number | null, b: number | null): number => {
     if (a === null) {
-        return false;
+        return 1;
     } else if (b === null) {
-        return true;
+        return -1;
     } else {
-        return a < b;
+        return a - b;
     }
 };
+
+export type PredicateFunction = typeof predFn;
