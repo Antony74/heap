@@ -1,6 +1,6 @@
 
-export const createTreeArray = () => {
-    const arr: (number | null)[] = [null];
+export const createTreeArray = <T>() => {
+    const arr: (T | null)[] = [null];
 
     return {
         getArray: () => arr,
@@ -24,4 +24,4 @@ export const createTreeArray = () => {
     };
 };
 
-export type TreeArray = ReturnType<typeof createTreeArray>;
+export type TreeArray<T> = ReturnType<typeof createTreeArray<T>>;

@@ -1,7 +1,7 @@
-export type PredFn = (a: number, b: number) => number;
+export type PredFn<T> = (a: T, b: T) => number;
 
-export const createPredFnWithNull = (predFn: PredFn) => {
-    return (a: number | null, b: number | null): number => {
+export const createPredFnWithNull = <T>(predFn: PredFn<T>) => {
+    return (a: T | null, b: T | null): number => {
         if (a === null) {
             return 1;
         } else if (b === null) {
@@ -12,4 +12,4 @@ export const createPredFnWithNull = (predFn: PredFn) => {
     };
 };
 
-export type PredFnWithNull = ReturnType<typeof createPredFnWithNull>;
+export type PredFnWithNull<T> = ReturnType<typeof createPredFnWithNull<T>>;

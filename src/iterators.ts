@@ -1,12 +1,12 @@
 import { PredFnWithNull } from './predFn';
 import { TreeArray } from './treeArray';
 
-export const createUpIterator = (treeArray: TreeArray, index: number) => {
+export const createUpIterator = <T>(treeArray: TreeArray<T>, index: number) => {
     return {
         getArray: () => treeArray.getArray(),
         getIndex: () => index,
         getValue: () => treeArray.getArray()[index],
-        setValue: (value: number | null) => {
+        setValue: (value: T | null) => {
             treeArray.getArray()[index] = value;
         },
         next: () => {
@@ -16,18 +16,18 @@ export const createUpIterator = (treeArray: TreeArray, index: number) => {
     };
 };
 
-type ListIterator = ReturnType<typeof createUpIterator>;
+type ListIterator<T> = ReturnType<typeof createUpIterator<T>>;
 
-export const createDownIterator = (
-    treeArray: TreeArray,
+export const createDownIterator = <T>(
+    treeArray: TreeArray<T>,
     index: number,
-    predFn: PredFnWithNull
-): ListIterator => {
+    predFn: PredFnWithNull<T>
+): ListIterator<T> => {
     return {
         getArray: () => treeArray.getArray(),
         getIndex: () => index,
         getValue: () => treeArray.getArray()[index],
-        setValue: (value: number | null) => {
+        setValue: (value: T | null) => {
             treeArray.getArray()[index] = value;
         },
         next: () => {
@@ -51,7 +51,7 @@ export const createDownIterator = (
     };
 };
 
-export const createSwapIterator = (iterator: ListIterator) => {
+export const createSwapIterator = <T>(iterator: ListIterator<T>) => {
     let prev = 0;
     return {
         ...iterator,
@@ -68,4 +68,5 @@ export const createSwapIterator = (iterator: ListIterator) => {
     };
 };
 
-export type SwapIterator = ReturnType<typeof createSwapIterator>;
+export type SwapIterator<T> = ReturnType<typeof createSwapIterator<T>>;
+    

@@ -7,14 +7,14 @@ import {
 import { PredFnWithNull } from './predFn';
 import { createTreeArray } from './treeArray';
 
-export const createHeap = (predFn: PredFnWithNull) => {
-    const treeArray = createTreeArray();
+export const createHeap = <T>(predFn: PredFnWithNull<T>) => {
+    const treeArray = createTreeArray<T>();
     let length = 0;
 
     const heap = {
         size: () => length,
 
-        push: (value: number) => {
+        push: (value: T) => {
             const arr = treeArray.getArray();
             let index = arr.length;
             const parentIndex = treeArray.getParentIndex(index);
@@ -29,15 +29,15 @@ export const createHeap = (predFn: PredFnWithNull) => {
                 arr.push(value);
             }
 
-            bubble(
-                createSwapIterator(createUpIterator(treeArray, index)),
+            bubble<T>(
+                createSwapIterator<T>(createUpIterator<T>(treeArray, index)),
                 predFn
             );
 
             ++length;
         },
 
-        take: (): number | null => {
+        take: (): T | null => {
             const arr = treeArray.getArray();
             const result = arr[1];
             if (result === null) {

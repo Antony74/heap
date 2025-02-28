@@ -1,7 +1,7 @@
 import { SwapIterator } from './iterators';
 import { PredFnWithNull } from './predFn';
 
-export const bubble = (iterator: SwapIterator, predFn: PredFnWithNull) => {
+export const bubble = <T>(iterator: SwapIterator<T>, predFn: PredFnWithNull<T>) => {
     if (iterator === null) {
         return;
     }
