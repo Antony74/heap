@@ -20,7 +20,7 @@ const findMaximizedCapital2 = (
 
         while (!projectIn || projectIn.capital > w) {
             const projectOut = heap.take();
-            if (projectOut === null) {
+            if (!projectOut) {
                 return w;
             }
             w += projectOut.profit;
