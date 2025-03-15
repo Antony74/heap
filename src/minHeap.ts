@@ -1,16 +1,21 @@
-// A simple concrete implementation of a max heap of numbers, all in one file.
+// A simple concrete implementation of a min heap of numbers, all in one file.
 
 const predFn = (a: number | null, b: number | null): number => {
-        if (a === null) {
-            return 1;
-        } else if (b === null) {
-            return -1;
-        } else {
-            return a - b;
-        }
-    };
+    if (a === null) {
+        return 1;
+    } else if (b === null) {
+        return -1;
+    } else {
+        return a - b;
+    }
+};
+
+const predFn2 = (a: number | null, b: number | null): boolean => {
+    return predFn(a, b) < 0;
+};
 
 type PredFnWithNull = typeof predFn;
+type PredFn2 = typeof predFn2;
 
 const createTreeArray = () => {
     const arr: (number | null)[] = [null];
@@ -59,7 +64,7 @@ type ListIterator = ReturnType<typeof createUpIterator>;
 const createDownIterator = <T>(
     treeArray: TreeArray,
     index: number,
-    predFn: PredFnWithNull
+    predFn2: PredFn2
 ): ListIterator => {
     return {
         getArray: () => treeArray.getArray(),
@@ -78,7 +83,7 @@ const createDownIterator = <T>(
             } else {
                 const leftValue = treeArray.getArray()[left];
                 const rightValue = treeArray.getArray()[right];
-                if (predFn(leftValue, rightValue) < 0) {
+                if (predFn2(leftValue, rightValue)) {
                     index = left;
                 } else {
                     index = right;
@@ -107,7 +112,7 @@ const createSwapIterator = (iterator: ListIterator) => {
 };
 
 type SwapIterator = ReturnType<typeof createSwapIterator>;
-    
+
 const bubble = (iterator: SwapIterator, predFn: PredFnWithNull) => {
     if (iterator === null) {
         return;
@@ -143,10 +148,7 @@ export const createHeap = () => {
             let index = arr.length;
             const parentIndex = treeArray.getParentIndex(index);
 
-            if (
-                treeArray.inRange(parentIndex) &&
-                arr[parentIndex] === null
-            ) {
+            if (treeArray.inRange(parentIndex) && arr[parentIndex] === null) {
                 index = parentIndex;
                 arr[parentIndex] = value;
             } else {
@@ -170,7 +172,7 @@ export const createHeap = () => {
             arr[1] = null;
 
             bubble(
-                createSwapIterator(createDownIterator(treeArray, 1, predFn)),
+                createSwapIterator(createDownIterator(treeArray, 1, predFn2)),
                 (a, b) => -predFn(a, b)
             );
 
