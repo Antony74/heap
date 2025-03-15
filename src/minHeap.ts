@@ -2,19 +2,17 @@
 
 export type PredFn = (a: number, b: number) => number;
 
-export const createPredFnWithNull = (predFn: PredFn) => {
-    return (a: number | null, b: number | null): number => {
+export const predFn = (a: number | null, b: number | null): number => {
         if (a === null) {
             return 1;
         } else if (b === null) {
             return -1;
         } else {
-            return predFn(a, b);
+            return a - b;
         }
     };
-};
 
-export type PredFnWithNull = ReturnType<typeof createPredFnWithNull>;
+export type PredFnWithNull = typeof predFn;
 
 export const createTreeArray = () => {
     const arr: (number | null)[] = [null];
@@ -135,7 +133,7 @@ export const bubble = (iterator: SwapIterator, predFn: PredFnWithNull) => {
     bubble(iterator, predFn);
 };
 
-export const createHeap = (predFn: PredFnWithNull) => {
+export const createHeap = () => {
     const treeArray = createTreeArray();
     let length = 0;
 
