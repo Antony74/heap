@@ -76,21 +76,19 @@ const createDownIterator = <T>(
 ): ListIterator => {
     return {
         next: () => {
-            const left = treeArray.getLeftIndex(index);
-            const right = treeArray.getRightIndex(index);
-            if (!treeArray.inRange(left) && !treeArray.inRange(right)) {
+            const leftIndex = treeArray.getLeftIndex(index);
+            const rightIndex = treeArray.getRightIndex(index);
+            const leftValue = treeArray.getArray()[leftIndex];
+            const rightValue = treeArray.getArray()[rightIndex];
+
+            if (!treeArray.inRange(leftIndex) && !treeArray.inRange(rightIndex)) {
                 return false;
-            } else if (!treeArray.inRange(right)) {
-                index = left;
+            } else if (!treeArray.inRange(rightIndex) || isLessThan(leftValue, rightValue)) {
+                index = leftIndex;
             } else {
-                const leftValue = treeArray.getArray()[left];
-                const rightValue = treeArray.getArray()[right];
-                if (isLessThan(leftValue, rightValue)) {
-                    index = left;
-                } else {
-                    index = right;
-                }
+                index = rightIndex;
             }
+
             return treeArray.inRange(index);
         },
         swap: (): boolean => {
