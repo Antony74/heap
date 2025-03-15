@@ -113,14 +113,14 @@ export const createHeap = () => {
         push: (value: number) => {
             const arr = treeArray.getArray();
             let index = arr.length;
-            const parentIndex = treeArray.getParentIndex(index);
+            // const parentIndex = treeArray.getParentIndex(index);
 
-            if (treeArray.inRange(parentIndex) && arr[parentIndex] === null) {
-                index = parentIndex;
-                arr[parentIndex] = value;
-            } else {
+            // if (treeArray.inRange(parentIndex) && arr[parentIndex] === null) {
+            //     index = parentIndex;
+            //     arr[parentIndex] = value;
+            // } else {
                 arr.push(value);
-            }
+            // }
 
             bubble(createUpIterator(treeArray, index));
 
@@ -130,9 +130,6 @@ export const createHeap = () => {
         take: (): number | null => {
             const arr = treeArray.getArray();
             const result = arr[1];
-            if (result === null) {
-                return null;
-            }
             arr[1] = null;
 
             bubble(createDownIterator(treeArray, 1));
