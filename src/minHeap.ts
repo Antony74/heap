@@ -1,9 +1,9 @@
 // A simple concrete implementation of a max heap of numbers, all in one file.
 
-export type PredFn<T> = (a: T, b: T) => number;
+export type PredFn = (a: number, b: number) => number;
 
-export const createPredFnWithNull = <T>(predFn: PredFn<T>) => {
-    return (a: T | null, b: T | null): number => {
+export const createPredFnWithNull = (predFn: PredFn) => {
+    return (a: number | null, b: number | null): number => {
         if (a === null) {
             return 1;
         } else if (b === null) {
@@ -14,10 +14,10 @@ export const createPredFnWithNull = <T>(predFn: PredFn<T>) => {
     };
 };
 
-export type PredFnWithNull<T> = ReturnType<typeof createPredFnWithNull<T>>;
+export type PredFnWithNull = ReturnType<typeof createPredFnWithNull>;
 
-export const createTreeArray = <T>() => {
-    const arr: (T | null)[] = [null];
+export const createTreeArray = () => {
+    const arr: (number | null)[] = [null];
 
     return {
         getArray: () => arr,
@@ -41,14 +41,14 @@ export const createTreeArray = <T>() => {
     };
 };
 
-export type TreeArray<T> = ReturnType<typeof createTreeArray<T>>;
+export type TreeArray = ReturnType<typeof createTreeArray>;
 
-export const createUpIterator = <T>(treeArray: TreeArray<T>, index: number) => {
+export const createUpIterator = (treeArray: TreeArray, index: number) => {
     return {
         getArray: () => treeArray.getArray(),
         getIndex: () => index,
         getValue: () => treeArray.getArray()[index],
-        setValue: (value: T | null) => {
+        setValue: (value: number | null) => {
             treeArray.getArray()[index] = value;
         },
         next: () => {
@@ -58,18 +58,18 @@ export const createUpIterator = <T>(treeArray: TreeArray<T>, index: number) => {
     };
 };
 
-type ListIterator<T> = ReturnType<typeof createUpIterator<T>>;
+type ListIterator = ReturnType<typeof createUpIterator>;
 
 export const createDownIterator = <T>(
-    treeArray: TreeArray<T>,
+    treeArray: TreeArray,
     index: number,
-    predFn: PredFnWithNull<T>
-): ListIterator<T> => {
+    predFn: PredFnWithNull
+): ListIterator => {
     return {
         getArray: () => treeArray.getArray(),
         getIndex: () => index,
         getValue: () => treeArray.getArray()[index],
-        setValue: (value: T | null) => {
+        setValue: (value: number | null) => {
             treeArray.getArray()[index] = value;
         },
         next: () => {
@@ -93,7 +93,7 @@ export const createDownIterator = <T>(
     };
 };
 
-export const createSwapIterator = <T>(iterator: ListIterator<T>) => {
+export const createSwapIterator = (iterator: ListIterator) => {
     let prev = 0;
     return {
         ...iterator,
@@ -110,9 +110,9 @@ export const createSwapIterator = <T>(iterator: ListIterator<T>) => {
     };
 };
 
-export type SwapIterator<T> = ReturnType<typeof createSwapIterator<T>>;
+export type SwapIterator = ReturnType<typeof createSwapIterator>;
     
-export const bubble = <T>(iterator: SwapIterator<T>, predFn: PredFnWithNull<T>) => {
+export const bubble = (iterator: SwapIterator, predFn: PredFnWithNull) => {
     if (iterator === null) {
         return;
     }
@@ -135,14 +135,14 @@ export const bubble = <T>(iterator: SwapIterator<T>, predFn: PredFnWithNull<T>) 
     bubble(iterator, predFn);
 };
 
-export const createHeap = <T>(predFn: PredFnWithNull<T>) => {
-    const treeArray = createTreeArray<T>();
+export const createHeap = (predFn: PredFnWithNull) => {
+    const treeArray = createTreeArray();
     let length = 0;
 
     const heap = {
         size: () => length,
 
-        push: (value: T) => {
+        push: (value: number) => {
             const arr = treeArray.getArray();
             let index = arr.length;
             const parentIndex = treeArray.getParentIndex(index);
@@ -157,15 +157,15 @@ export const createHeap = <T>(predFn: PredFnWithNull<T>) => {
                 arr.push(value);
             }
 
-            bubble<T>(
-                createSwapIterator<T>(createUpIterator<T>(treeArray, index)),
+            bubble(
+                createSwapIterator(createUpIterator(treeArray, index)),
                 predFn
             );
 
             ++length;
         },
 
-        take: (): T | null => {
+        take: (): number | null => {
             const arr = treeArray.getArray();
             const result = arr[1];
             if (result === null) {
