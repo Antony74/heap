@@ -38,9 +38,7 @@ const createTreeArray = () => {
             const parentIndex = treeArr.getParentIndex(index);
             const parentValue = arr[parentIndex];
 
-            if (value === null) {
-                return false;
-            } else if (parentValue === null || value < parentValue) {
+            if (isLessThan(value, parentValue)) {
                 arr[index] = arr[parentIndex];
                 arr[parentIndex] = value;
                 return true;
@@ -80,7 +78,7 @@ type ListIterator = ReturnType<typeof createUpIterator>;
 
 const createDownIterator = <T>(
     treeArray: TreeArray,
-    index: number,
+    index: number
 ): ListIterator => {
     return {
         getArray: () => treeArray.getArray(),
