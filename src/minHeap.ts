@@ -1,8 +1,6 @@
 // A simple concrete implementation of a max heap of numbers, all in one file.
 
-export type PredFn = (a: number, b: number) => number;
-
-export const predFn = (a: number | null, b: number | null): number => {
+const predFn = (a: number | null, b: number | null): number => {
         if (a === null) {
             return 1;
         } else if (b === null) {
@@ -12,9 +10,9 @@ export const predFn = (a: number | null, b: number | null): number => {
         }
     };
 
-export type PredFnWithNull = typeof predFn;
+type PredFnWithNull = typeof predFn;
 
-export const createTreeArray = () => {
+const createTreeArray = () => {
     const arr: (number | null)[] = [null];
 
     return {
@@ -39,9 +37,9 @@ export const createTreeArray = () => {
     };
 };
 
-export type TreeArray = ReturnType<typeof createTreeArray>;
+type TreeArray = ReturnType<typeof createTreeArray>;
 
-export const createUpIterator = (treeArray: TreeArray, index: number) => {
+const createUpIterator = (treeArray: TreeArray, index: number) => {
     return {
         getArray: () => treeArray.getArray(),
         getIndex: () => index,
@@ -58,7 +56,7 @@ export const createUpIterator = (treeArray: TreeArray, index: number) => {
 
 type ListIterator = ReturnType<typeof createUpIterator>;
 
-export const createDownIterator = <T>(
+const createDownIterator = <T>(
     treeArray: TreeArray,
     index: number,
     predFn: PredFnWithNull
@@ -91,7 +89,7 @@ export const createDownIterator = <T>(
     };
 };
 
-export const createSwapIterator = (iterator: ListIterator) => {
+const createSwapIterator = (iterator: ListIterator) => {
     let prev = 0;
     return {
         ...iterator,
@@ -108,9 +106,9 @@ export const createSwapIterator = (iterator: ListIterator) => {
     };
 };
 
-export type SwapIterator = ReturnType<typeof createSwapIterator>;
+type SwapIterator = ReturnType<typeof createSwapIterator>;
     
-export const bubble = (iterator: SwapIterator, predFn: PredFnWithNull) => {
+const bubble = (iterator: SwapIterator, predFn: PredFnWithNull) => {
     if (iterator === null) {
         return;
     }
