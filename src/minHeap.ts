@@ -1,21 +1,14 @@
 // A simple concrete implementation of a min heap of numbers, all in one file.
 
-const predFn = (a: number | null, b: number | null): number => {
+const isLessThan = (a: number | null, b: number | null): boolean => {
     if (a === null) {
-        return 1;
+        return false;
     } else if (b === null) {
-        return -1;
+        return true;
     } else {
-        return a - b;
+        return a < b;
     }
 };
-
-const predFn2 = (a: number | null, b: number | null): boolean => {
-    return predFn(a, b) < 0;
-};
-
-type PredFnWithNull = typeof predFn;
-type PredFn2 = typeof predFn2;
 
 const createTreeArray = () => {
     const arr: (number | null)[] = [null];
@@ -88,7 +81,6 @@ type ListIterator = ReturnType<typeof createUpIterator>;
 const createDownIterator = <T>(
     treeArray: TreeArray,
     index: number,
-    predFn2: PredFn2
 ): ListIterator => {
     return {
         getArray: () => treeArray.getArray(),
@@ -107,7 +99,7 @@ const createDownIterator = <T>(
             } else {
                 const leftValue = treeArray.getArray()[left];
                 const rightValue = treeArray.getArray()[right];
-                if (predFn2(leftValue, rightValue)) {
+                if (isLessThan(leftValue, rightValue)) {
                     index = left;
                 } else {
                     index = right;
@@ -157,7 +149,7 @@ export const createHeap = () => {
             }
             arr[1] = null;
 
-            bubble(createDownIterator(treeArray, 1, predFn2));
+            bubble(createDownIterator(treeArray, 1));
 
             --length;
 
