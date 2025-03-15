@@ -57,12 +57,6 @@ const createUpIterator = (treeArray: TreeArray, index: number) => {
     let prev = 0;
 
     return {
-        getArray: () => treeArray.getArray(),
-        getIndex: () => index,
-        getValue: () => treeArray.getArray()[index],
-        setValue: (value: number | null) => {
-            treeArray.getArray()[index] = value;
-        },
         next: () => {
             prev = index;
             index = treeArray.getParentIndex(index);
@@ -81,12 +75,6 @@ const createDownIterator = <T>(
     index: number
 ): ListIterator => {
     return {
-        getArray: () => treeArray.getArray(),
-        getIndex: () => index,
-        getValue: () => treeArray.getArray()[index],
-        setValue: (value: number | null) => {
-            treeArray.getArray()[index] = value;
-        },
         next: () => {
             const left = treeArray.getLeftIndex(index);
             const right = treeArray.getRightIndex(index);
