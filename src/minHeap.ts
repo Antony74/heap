@@ -20,7 +20,7 @@ type PredFn2 = typeof predFn2;
 const createTreeArray = () => {
     const arr: (number | null)[] = [null];
 
-    return {
+    const treeArr = {
         getArray: () => arr,
 
         inRange: (index: number) => index > 0 && index < arr.length,
@@ -39,12 +39,32 @@ const createTreeArray = () => {
             const result = index * 2 + 1;
             return result;
         },
+
+        swap: (index: number): boolean => {
+            const value = arr[index];
+            const parentIndex = treeArr.getParentIndex(index);
+            const parentValue = arr[parentIndex];
+
+            if (value === null) {
+                return false;
+            } else if (parentValue === null || value < parentValue) {
+                arr[index] = arr[parentIndex];
+                arr[parentIndex] = value;
+                return true;
+            } else {
+                return false;
+            }
+        },
     };
+
+    return treeArr;
 };
 
 type TreeArray = ReturnType<typeof createTreeArray>;
 
 const createUpIterator = (treeArray: TreeArray, index: number) => {
+    let prev = 0;
+
     return {
         getArray: () => treeArray.getArray(),
         getIndex: () => index,
@@ -53,8 +73,12 @@ const createUpIterator = (treeArray: TreeArray, index: number) => {
             treeArray.getArray()[index] = value;
         },
         next: () => {
+            prev = index;
             index = treeArray.getParentIndex(index);
             return treeArray.inRange(index);
+        },
+        swap: (): boolean => {
+            return treeArray.swap(prev);
         },
     };
 };
@@ -91,49 +115,14 @@ const createDownIterator = <T>(
             }
             return treeArray.inRange(index);
         },
-    };
-};
-
-const createSwapIterator = (iterator: ListIterator) => {
-    let prev = 0;
-    return {
-        ...iterator,
-        next: () => {
-            prev = iterator.getIndex();
-            return iterator.next();
-        },
-        swap: () => {
-            const arr = iterator.getArray();
-            const value = iterator.getValue();
-            iterator.setValue(arr[prev]);
-            arr[prev] = value;
+        swap: (): boolean => {
+            return treeArray.swap(index);
         },
     };
 };
 
-type SwapIterator = ReturnType<typeof createSwapIterator>;
-
-const bubble = (iterator: SwapIterator, predFn: PredFnWithNull) => {
-    if (iterator === null) {
-        return;
-    }
-
-    const prevValue = iterator.getValue();
-    const next = iterator.next();
-
-    if (next === false) {
-        return;
-    }
-
-    const value = iterator.getValue();
-
-    if (predFn(prevValue, value) >= 0) {
-        return;
-    }
-
-    iterator.swap();
-
-    bubble(iterator, predFn);
+const bubble = (iterator: ListIterator) => {
+    while (iterator.next() && iterator.swap()) {}
 };
 
 export const createHeap = () => {
@@ -155,10 +144,7 @@ export const createHeap = () => {
                 arr.push(value);
             }
 
-            bubble(
-                createSwapIterator(createUpIterator(treeArray, index)),
-                predFn
-            );
+            bubble(createUpIterator(treeArray, index));
 
             ++length;
         },
@@ -171,10 +157,7 @@ export const createHeap = () => {
             }
             arr[1] = null;
 
-            bubble(
-                createSwapIterator(createDownIterator(treeArray, 1, predFn2)),
-                (a, b) => -predFn(a, b)
-            );
+            bubble(createDownIterator(treeArray, 1, predFn2));
 
             --length;
 
